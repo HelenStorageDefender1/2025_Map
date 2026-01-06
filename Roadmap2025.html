@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Engineering Roadmap Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --completed: #27ae60;
+            --inprogress: #2980b9;
+            --todo: #e67e22;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-color); padding: 40px; color: var(--text-main); line-height: 1.6; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .header h1 { font-size: 2.5rem; color: #34495e; margin-bottom: 10px; }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 6px solid #ddd;
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .card.q1 { border-color: var(--completed); }
+        .card.q2 { border-color: var(--completed); }
+        .card.q3 { border-color: var(--inprogress); }
+        .card.q4 { border-color: var(--todo); }
+
+        .pct-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 8px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card.q1 .pct-circle { border-top-color: var(--completed); border-right-color: var(--completed); }
+        .card.q2 .pct-circle { border-color: var(--completed); }
+        .card.q3 .pct-circle { border-top-color: var(--inprogress); border-right-color: var(--inprogress); border-bottom-color: var(--inprogress); }
+        .card.q4 .pct-circle { border-top-color: var(--todo); border-right-color: var(--todo); }
+
+        .stats-label { font-size: 1rem; font-weight: 600; color: #7f8c8d; }
+        .click-hint { font-size: 0.8rem; color: #3498db; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(44, 62, 80, 0.8);
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 4% auto;
+            padding: 40px;
+            width: 85%;
+            max-width: 700px;
+            border-radius: 20px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        .close { float: right; font-size: 30px; font-weight: bold; color: #95a5a6; cursor: pointer; transition: 0.2s; }
+        .close:hover { color: #e74c3c; }
+
+        .status-group { margin-bottom: 25px; }
+        .status-badge { 
+            display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px;
+        }
+        .badge-done { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .badge-progress { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+        .badge-todo { background: #fff3e0; color: #ef6c00; border: 1px solid #ffe0b2; }
+
+        .task-list { list-style: none; padding: 0; margin: 0; }
+        .task-list li { padding: 10px 15px; border-bottom: 1px solid #f1f1f1; font-size: 0.95rem; display: flex; align-items: flex-start; }
+        .task-list li::before { content: "•"; color: #3498db; font-weight: bold; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>2025 Engineering Roadmap Review</h1>
+    <p>Overall Annual Completion: <strong>83.33%</strong> | 75 Features Delivered</p>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card q1" onclick="showTasks('q1')">
+        <h3>Quarter 1</h3>
+        <div class="pct-circle">87%</div>
+        <div class="stats-label">13 / 15 Completed</div>
+        <div class="click-hint">View Features</div>
+    </div>
+    <div class="card q2" onclick="showTasks('q2')">
+        <h3>Quarter 2</h3>
+        <div class="pct-circle">100%</div>
+        <div class="stats-label">14 / 14 Completed</div>
+        <div class="click-hint">View Features</div>
+    </div>
+    <div class="card q3" onclick="showTasks('q3')">
+        <h3>Quarter 3</h3>
+        <div class="pct-circle">92%</div>
+        <div class="stats-label">24 / 26 Completed</div>
+        <div class="click-hint">View Features</div>
+    </div>
+    <div class="card q4" onclick="showTasks('q4')">
+        <h3>Quarter 4</h3>
+        <div class="pct-circle">69%</div>
+        <div class="stats-label">24 / 35 Completed</div>
+        <div class="click-hint">View Features</div>
+    </div>
+</div>
+
+<div id="roadmapModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalHeader" style="margin-top:0; color:#2c3e50; border-bottom: 2px solid #eee; padding-bottom:15px;"></h2>
+        <div id="modalList"></div>
+    </div>
+</div>
+
+<script>
+    const roadmapData = {
+        q1: {
+            done: ["Battery Health Analysis", "EZMove (Sitelink)", "Twilio Error Code Analysis", "Twilio Cost Reduction", "Facility Dashboard Updates", "User Acceptance Testing updates for dashboards", "Management Dashboard- Changing YTD to Rolling 12 months on graphs", "CS Automation Report: Phase 1 to 4 of Customer Service automation reporting", "Escalation Matrix: Handling Motion, Door, and Zone sensors", "Audit Log on BO", "Subscription Bug Fixes: Resolving issues within the subscription module", "First Free Zone Changes", "EEN Extension"],
+            progress: [],
+            todo: ["2FA", "SD REST API's"]
+        },
+        q2: {
+            done: ["City Line – 13-Month Subscription Trends Dashboard", "Storedge Tenant Ledger FTP Report(Update Sheet/ Summary Sheet)", "Historical data fixes with Sitelink / Storedge for management summary dashboard", "Conversion % Fixes for Storedge & Sitelink- Management Summary Dashboard", "Changed the from email address to \"Report@storage-defender.com\" for emails that go out from SD to facility", "EZMove V1.1 One phone number per state in US", "Launched 2-week trial of Reservation feature in EZMove flow", "VV+ incident video on the task history", "Updated Slack and Email incident alerts to include video URLs", "Escalation Matrix Update- Door Sensor", "Incident Query Optimization", "RB Sensor scan", "Facility sync Frequency in BO", "CS Feature Request-Allow Re-send Tenant Addendum"],
+            progress: [],
+            todo: []
+        },
+        q3: {
+            done: ["WestCoast - Need to fetch restricted data for non smart unit renters from Storedge", "Latency fix in Reports [Summary of subscription report]", "Non-smart unit tenants were incorrectly receiving the notification \"no longer disabled for non-payment.\"", "Refresh", "SD Handling Charges", "Sitelink getting historical data after 10 days this might impact management dashboard", "\"No\" Response from tenant on a motion message", "Device health updates [Hot Fixes]", "Ops Team Deployment Improvement - Phase 1", "Latency Fixes [Management dashboard & Inventory page]", "Restrict Incident Processing to Active & Internal Facilities", "Security - Restrict backend services access to external world", "Security - Setup different database credentials for each service", "Allow kubernetes cluster access to only authorized networks", "Upgrade and test rabbitmq version", "Sitelink Sync optimization / Predict Completion Date", "StorEdge-API Limit for creating Dashboard", "Invoicing File Versioning and Data Integrity", "[Implementation] Device Events & Gateway Events in BigQuery", "Consider bigquery slot reservations to reduce GCP bill", "Safeguarding system from Bulk Messages", "Ops Team Deployment Improvement - Phase 2", "SPIKE - Structure events data in the production system", "Automation Environment Setup"],
+            progress: ["Start working on Hevo Replacement"],
+            todo: ["Service Quality Improvements / Validate Phone to Send Text Messages"]
+        },
+        q4: {
+            done: ["Notification Workflow Change", "Invoicing logic fixes", "Bugs Related to Monitoring & Control Hub Dashboard", "SuperAdmin: Data Deletion for Slack Integration", "Bugs Related to Incident Escalation Matrix", "Including Incident Survery As A Part Of Task", "Sitelink Optimization", "EEN: UI / UX Improvements", "Migrate SD quality reports to github actions", "Limit access to repos in git based on user roles", "Integrate security tools into CI/CD pipeline (Started)", "DB Optmization (Incident Query Optimized)", "New Billing Model \"Facility Subscription\"", "Search By Device # On Inventory Page", "Help Resource Content Updates", "Address Differentiation on Manage Facility Page", "Incident & Task Management Enhancements V2.0", "Org/Region Level Inventory Summary", "Add Org/Regional Users to Missing Device Emails", "Pre Installed Mobile Friendly Flow", "Fix MR Test Rerun Timeouts", "DB Optmization (Load Testing Outcome Decision)", "Scaling of production servers and db / New prometheus instance", "Clean up partition tables in production and staging db"],
+            progress: ["EEN Camera Driven 'Person Detection' & LPR", "Ops phase 3", "Incident task management : Manage Over lock", "Incident Escalation For Climate Sensor", "DB Optmization", "Hevo Replacement - In Progress", "Replace CircleCI with github actions - Start"],
+            todo: ["Source of Move In Chart", "Service Quality Improvements (Phone number validation)", "Automating Shipment Tracking", "Integrate security tools into CI/CD pipeline (In Progress)"]
+        }
+    };
+
+    function showTasks(q) {
+        const modal = document.getElementById("roadmapModal");
+        const header = document.getElementById("modalHeader");
+        const listContainer = document.getElementById("modalList");
+        
+        header.innerText = q.toUpperCase() + " Roadmap Features";
+        let content = "";
+
+        if(roadmapData[q].done.length > 0) {
+            content += `<div class="status-group"><span class="status-badge badge-done">COMPLETED</span><ul class="task-list">`;
+            roadmapData[q].done.forEach(f => content += `<li>${f}</li>`);
+            content += `</ul></div>`;
+        }
+        if(roadmapData[q].progress.length > 0) {
+            content += `<div class="status-group"><span class="status-badge badge-progress">IN PROGRESS</span><ul class="task-list">`;
+            roadmapData[q].progress.forEach(f => content += `<li>${f}</li>`);
+            content += `</ul></div>`;
+        }
+        if(roadmapData[q].todo.length > 0) {
+            content += `<div class="status-group"><span class="status-badge badge-todo">TO DO</span><ul class="task-list">`;
+            roadmapData[q].todo.forEach(f => content += `<li>${f}</li>`);
+            content += `</ul></div>`;
+        }
+
+        listContainer.innerHTML = content;
+        modal.style.display = "block";
+    }
+
+    function closeModal() { document.getElementById("roadmapModal").style.display = "none"; }
+    window.onclick = function(event) { if (event.target == document.getElementById("roadmapModal")) closeModal(); }
+</script>
+
+</body>
+</html>
